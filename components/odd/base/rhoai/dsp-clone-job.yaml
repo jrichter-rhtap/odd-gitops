@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: dsp-clone-job-odd-gitops
+spec:  
+  template:         
+    metadata:
+      name: dsp-clone-job-odd-gitops
+    spec:  
+      serviceAccountName: odd-dsp-job
+      containers:
+      - name: initialize-dsp
+        image: quay.io/redhat-ai-dev/utils:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          NS=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+          oc wait -l statefulset=odd-notebook --for=condition=ready pod --timeout=300s
+          oc exec  StatefulSet/odd-notebook -- git clone https://github.com/jrichter-rhtap/odd
+      restartPolicy: Never

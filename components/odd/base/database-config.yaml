@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: odd-database-config
+data:
+  VECTORDB_HOST: "odd-database"
+  VECTORDB_PORT: ""
